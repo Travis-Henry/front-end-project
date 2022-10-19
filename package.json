@@ -1,0 +1,19 @@
+{
+  "name": "front-end-project",
+  "version": "1.0.0",
+  "description": "This website will provide SpaceX mission info",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Travis-Henry/front-end-project.git"
+  },
+  "author": "Travis Henry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Travis-Henry/front-end-project/issues"
+  },
+  "homepage": "https://github.com/Travis-Henry/front-end-project#readme"
+}
