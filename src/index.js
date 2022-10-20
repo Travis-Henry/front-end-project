@@ -86,13 +86,15 @@ function createInfoCard({name, date_local, links, details, flight_number}, rocke
 
     if(links.flickr.original.length != 0){
         let pics = links.flickr.original;
+        let $row4 = $(`<div class='row'></div>`);
 
         console.log(`Image: ${links.flickr.original.length}`);
-        for(let i = 0; i < pics.length || i < 4; i++){
+        for(let i = 0; i < pics.length && i < 4; i++){
             console.log(pics[i]);
+            let $pic = $(`<div class="col-3"><img class='img-fluid' src='${pics[i]}'></div>`);
+            $row4.append($pic);
         }
-
-
+        $cardBody.append($row4);
     }
 
     ///////////////////////////-------Append------------//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
