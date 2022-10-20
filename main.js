@@ -18,11 +18,9 @@ function load(){
         }
         //sortByFlightNumber();
   });       
-   
 }
 
 load();
-
 
 
 function createInfoCard({name, date_local, links, details, flight_number}, rocket, launchSite, payloads, i){
@@ -32,14 +30,14 @@ function createInfoCard({name, date_local, links, details, flight_number}, rocke
     let $headerRow = $(`<div class='row'></div>`);
     let $cardBody = $(`<div class='card-body collapse' id='card${i}'></div>`);
     ////////////////////////////---------Header_Elements------//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    $patch = $(`<div class='col-1'></div>`);
+    $patch = $(`<div class='col-2 my-auto'></div>`);
     if(links.patch.small != null){
         $patch.html(`<img class='patch img-fluid' src='${links.patch.small}'>`);
 
     }else{
         $patch.html(`<p>No Image</p>`)
     }
-    let $name = $(`<div class='col'><h1 class='missionName my-auto'>${name}<h1/></div>`);
+    let $name = $(`<div class='col my-auto'><h1 class='missionName my-auto'>${name}<h1/></div>`);
     let $date = $(`<div class='col'><h3>${date_local}</h3></div>`);
     ///////////////////////////------Body_Elements-------//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     let $row1 = $(`<div class='row'></div>`);
@@ -91,7 +89,7 @@ function createInfoCard({name, date_local, links, details, flight_number}, rocke
         console.log(`Image: ${links.flickr.original.length}`);
         for(let i = 0; i < pics.length && i < 4; i++){
             console.log(pics[i]);
-            let $pic = $(`<div class="col-3"><img class='img-fluid' src='${pics[i]}'></div>`);
+            let $pic = $(`<div class="col-3 my-auto"><img class='img-fluid' src='${pics[i]}'></div>`);
             $row4.append($pic);
         }
         $cardBody.append($row4);
@@ -105,26 +103,6 @@ function createInfoCard({name, date_local, links, details, flight_number}, rocke
     $(".main").append($card);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // function sortByFlightNumber(){
 //     let $children = $(".main").children();
