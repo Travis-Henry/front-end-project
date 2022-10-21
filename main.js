@@ -13,19 +13,19 @@ function load(){
         }
     }).done(function( data ) {
         console.log(data);
-        for(let i = 0; i < data.docs.length; i++){
-            createInfoCard(data.docs[i], data.docs[i].rocket, data.docs[i].launchpad, data.docs[i].payloads, i);
+        for(let i = data.docs.length -1; i >= 0; i--){
+            createInfoCard(data.docs[i], i);
         }
-        //sortByFlightNumber();
+        sortByDate();
   });       
 }
 
 load();
 
 
-function createInfoCard({name, date_local, links, details, flight_number}, rocket, launchSite, payloads, i){
+function createInfoCard({name, date_local, links, details, rocket, launchpad, payloads, date_utc, upcoming}, i){
     ///////////////////////////////-------Main_Elements--------//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    let $card = $(`<div class='infoCard card ${rocket.name} ${launchSite.locality}' id='${flight_number}'></div>`);
+    let $card = $(`<div class='infoCard card ${rocket.name} ${launchpad.locality}' id='${date_utc}'></div>`);
     let $cardHeader = $(`<div class='card-header container' data-bs-toggle='collapse' data-bs-target='#card${i}' aria-expanded='false'></div>`);
     let $headerRow = $(`<div class='row'></div>`);
     let $cardBody = $(`<div class='card-body collapse' id='card${i}'></div>`);
@@ -35,10 +35,12 @@ function createInfoCard({name, date_local, links, details, flight_number}, rocke
         $patch.html(`<img class='patch img-fluid' src='${links.patch.small}'>`);
 
     }else{
-        $patch.html(`<p>No Image</p>`)
+        $patch.html(`<h5>No Patch</h5>`)
     }
     let $name = $(`<div class='col my-auto'><h1 class='missionName my-auto'>${name}<h1/></div>`);
-    let $date = $(`<div class='col'><h3>${date_local}</h3></div>`);
+    let $date = $(`<div class='col-2 float-right gx-0'><h3>${date_utc.slice(0, 10)}</h3></div>`);
+    let $upcoming = upcoming ? $(`<div class='col my-auto'><h3 class='upcoming my-auto'>Upcoming<h3/></div>`) 
+                             : $(`<div class='col my-auto'><h3 class='upcoming my-auto'>Past<h3/></div>`);                   ;
     ///////////////////////////------Body_Elements-------//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     let $row1 = $(`<div class='row'></div>`);
     let $row2 = $(`<div class='row'></div>`);
@@ -55,8 +57,8 @@ function createInfoCard({name, date_local, links, details, flight_number}, rocke
     }
     let $rocket = $(`<div class='col-6'><p><b>Rocket: </b>${rocket.name}</p></div>`);
 
-    let $location = $(`<div class='col-6'><p><b>Location: </b>${launchSite.locality}</p></div>`);
-    let $time = $(`<div class='col-6'><p><b>Time: </b>${"placeholder"}</p></div>`);
+    let $location = $(`<div class='col-6'><p><b>Launch location: </b>${launchpad.locality}</p></div>`);
+    let $time = $(`<div class='col-6'><p><b>Time: </b>${date_utc.slice(11, 16)} UTC</p></div>`);
 
     $row1.append($rocket);
     $row2.append($location, $time);
@@ -85,10 +87,7 @@ function createInfoCard({name, date_local, links, details, flight_number}, rocke
     if(links.flickr.original.length != 0){
         let pics = links.flickr.original;
         let $row4 = $(`<div class='row'></div>`);
-
-        console.log(`Image: ${links.flickr.original.length}`);
         for(let i = 0; i < pics.length && i < 4; i++){
-            console.log(pics[i]);
             let $pic = $(`<div class="col-3 my-auto"><img class='img-fluid' src='${pics[i]}'></div>`);
             $row4.append($pic);
         }
@@ -96,7 +95,7 @@ function createInfoCard({name, date_local, links, details, flight_number}, rocke
     }
 
     ///////////////////////////-------Append------------//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    $headerRow.append($patch, $name, $date);
+    $headerRow.append($patch, $name, $upcoming, $date);
     $cardHeader.append($headerRow);
 
     $card.append($cardHeader, $cardBody);
@@ -104,25 +103,29 @@ function createInfoCard({name, date_local, links, details, flight_number}, rocke
 
 }
 
-// function sortByFlightNumber(){
-//     let $children = $(".main").children();
-//     for(let i = 0; i < $children.length; i++){
-//         let current = Number($children[i].id);
-//         let next = Number($children[i+1].id);
-//         if(current == next){
-            
-//             return;
-//         }else if(current > next){
-//             $(`#${next}`).insertBefore(`#${current}`);
-//             console.log(`Moved ${next} behind ${current}`);
-//             sortByFlightNumber();
-//             return;
-//         }
-        
+function sortByDate(){                                 //Bubble sort algorithim
+    let $children = $(".main").children();
+    for(let i = 0; i <= $children.length; i++){
+        if(i+1 > $children.length - 1 ){
+            console.log("Sorted -index: " + i);
+            return true;
+        }
+        let $current = $children[i];
+        let $next = $children[i+1];
 
-//     }
-    
-//     //sortByFlightNumber();
-// }
+        let currentDate = Number($current.id.slice(0, 10).replace('-', '').replace('-', ''));
+        let nextDate = Number($next.id.slice(0, 10).replace('-', '').replace('-', ''));
+
+        if(currentDate === nextDate){
+            continue;
+        }else if(currentDate > nextDate){
+            continue;
+        }else if(currentDate < nextDate){
+            $($next).insertBefore($current);
+            sortByDate();
+            return;
+        }
+    }
+}
 
 
